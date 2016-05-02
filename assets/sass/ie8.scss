@@ -4,10 +4,21 @@
 @import 'libs/skel';
 
 /*
-	Striped by HTML5 UP
+	Prologue by HTML5 UP
 	html5up.net | @n33co
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 */
+
+/* Section/Article */
+
+	section, article {
+		> .last-child,
+		&.last-child {
+			margin-bottom: 0;
+		}
+	}
+
+/* Form */
 
 	form {
 		input[type="text"],
@@ -15,83 +26,49 @@
 		input[type="password"],
 		select,
 		textarea {
-			position: relative;
-			box-shadow: none !important;
 			-ms-behavior: url('assets/js/ie/PIE.htc');
 		}
 	}
+
+/* Button */
 
 	input[type="button"],
 	input[type="submit"],
 	input[type="reset"],
 	button,
 	.button {
-		position: relative;
-		box-shadow: none !important;
 		-ms-behavior: url('assets/js/ie/PIE.htc');
 	}
 
-	.pagination {
-		.pages {
-			a {
-				position: relative;
-				box-shadow: none !important;
-				-ms-behavior: url('assets/js/ie/PIE.htc');
-			}
-		}
-	}
-
-	.box {
-		&.calendar {
-			td {
-				a, span {
-					position: relative;
-					box-shadow: none !important;
-					-ms-behavior: url('assets/js/ie/PIE.htc');
-				}
-			}
-		}
-
-		&.text-style1 {
-			.inner {
-				position: relative;
-				box-shadow: none !important;
-				-ms-behavior: url('assets/js/ie/PIE.htc');
-			}
-		}
-	}
+/* Header */
 
 	#nav {
-		li {
-			a {
-				position: relative;
-				box-shadow: none !important;
-				-ms-behavior: url('assets/js/ie/PIE.htc');
-			}
-		}
-	}
+		ul {
+			li {
+				a {
+					color: #888;
 
-	.box {
-		&.post {
-			.info {
-				box-shadow: none !important;
-				-ms-behavior: url('assets/js/ie/PIE.htc');
-
-				.stats {
-					li {
-						a {
-							position: relative;
-							box-shadow: none !important;
-							-ms-behavior: url('assets/js/ie/PIE.htc');
-						}
+					&.active {
+						background: #1C2022;
 					}
 				}
 			}
 		}
 	}
 
-	#logo {
-		position: relative;
-		box-shadow: none !important;
-		-ms-behavior: url('assets/js/ie/PIE.htc');
+	#headerToggle {
+		.toggle {
+			background-color: #888;
+		}
+	}
+
+/* Main */
+
+	#main {
+		> section {
+			&.cover {
+				background-position: auto;
+				-ms-behavior: url('assets/js/ie/backgroundsize.min.htc');
+			}
+		}
 	}
