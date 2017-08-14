@@ -1,24 +1,36 @@
 /*
-	Striped by HTML5 UP
-	html5up.net | @n33co
+	Strata by HTML5 UP
+	html5up.net | @ajlkn
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 */
 
 (function($) {
 
+	var settings = {
+
+		// Parallax background effect?
+			parallax: true,
+
+		// Parallax factor (lower = more intense, higher = less intense).
+			parallaxFactor: 20
+
+	};
+
 	skel.breakpoints({
-		desktop: '(min-width: 737px)',
-		wide: '(min-width: 1201px)',
-		narrow: '(min-width: 737px) and (max-width: 1200px)',
-		narrower: '(min-width: 737px) and (max-width: 1000px)',
-		mobile: '(max-width: 736px)'
+		xlarge: '(max-width: 1800px)',
+		large: '(max-width: 1280px)',
+		medium: '(max-width: 980px)',
+		small: '(max-width: 736px)',
+		xsmall: '(max-width: 480px)'
 	});
 
 	$(function() {
 
-		var	$window = $(window),
+		var $window = $(window),
 			$body = $('body'),
-			$document = $(document);
+			$header = $('#header'),
+			$footer = $('#footer'),
+			$main = $('#main');
 
 		// Disable animations/transitions until the page has loaded.
 			$body.addClass('is-loading');
@@ -27,60 +39,96 @@
 				$body.removeClass('is-loading');
 			});
 
+		// Touch?
+			if (skel.vars.mobile) {
+
+				// Turn on touch mode.
+					$body.addClass('is-touch');
+
+				// Height fix (mostly for iOS).
+					window.setTimeout(function() {
+						$window.scrollTop($window.scrollTop() + 1);
+					}, 0);
+
+			}
+
 		// Fix: Placeholder polyfill.
 			$('form').placeholder();
 
-		// Prioritize "important" elements on mobile.
-			skel.on('+mobile -mobile', function() {
+		// Prioritize "important" elements on medium.
+			skel.on('+medium -medium', function() {
 				$.prioritize(
-					'.important\\28 mobile\\29',
-					skel.breakpoint('mobile').active
+					'.important\\28 medium\\29',
+					skel.breakpoint('medium').active
 				);
 			});
 
-		// Off-Canvas Sidebar.
+		// Footer.
+			skel.on('+medium', function() {
+				$footer.insertAfter($main);
+			});
 
-			// Height hack.
-				var $sc = $('#sidebar, #content'), tid;
+			skel.on('-medium !medium', function() {
+				$footer.appendTo($header);
+			});
 
-				$window
-					.on('resize', function() {
-						window.clearTimeout(tid);
-						tid = window.setTimeout(function() {
-							$sc.css('min-height', $document.height());
-						}, 100);
-					})
-					.on('load', function() {
-						$window.trigger('resize');
-					})
-					.trigger('resize');
+		// Header.
 
-			// Title Bar.
-				$(
-					'<div id="titleBar">' +
-						'<a href="#sidebar" class="toggle"></a>' +
-						'<span class="title">' + $('#logo').html() + '</span>' +
-					'</div>'
-				)
-					.appendTo($body);
+			// Parallax background.
 
-			// Sidebar
-				$('#sidebar')
-					.panel({
-						delay: 500,
-						hideOnClick: true,
-						hideOnSwipe: true,
-						resetScroll: true,
-						resetForms: true,
-						side: 'left',
-						target: $body,
-						visibleClass: 'sidebar-visible'
+				// Disable parallax on IE (smooth scrolling is jerky), and on mobile platforms (= better performance).
+					if (skel.vars.browser == 'ie'
+					||	skel.vars.mobile)
+						settings.parallax = false;
+
+				if (settings.parallax) {
+
+					skel.on('change', function() {
+
+						if (skel.breakpoint('medium').active) {
+
+							$window.off('scroll.strata_parallax');
+							$header.css('background-position', 'top left, center center');
+
+						}
+						else {
+
+							$header.css('background-position', 'left 0px');
+
+							$window.on('scroll.strata_parallax', function() {
+								$header.css('background-position', 'left ' + (-1 * (parseInt($window.scrollTop()) / settings.parallaxFactor)) + 'px');
+							});
+
+						}
+
 					});
 
-			// Fix: Remove navPanel transitions on WP<10 (poor/buggy performance).
-				if (skel.vars.os == 'wp' && skel.vars.osVersion < 10)
-					$('#titleBar, #sidebar, #main')
-						.css('transition', 'none');
+					$window.on('load', function() {
+						$window.triggerHandler('scroll');
+					});
+
+				}
+
+		// Main Sections: Two.
+
+			// Lightbox gallery.
+				$window.on('load', function() {
+
+					$('#two').poptrox({
+						caption: function($a) { return $a.next('h3').text(); },
+						overlayColor: '#2c2c2c',
+						overlayOpacity: 0.85,
+						popupCloserText: '',
+						popupLoaderText: '',
+						selector: '.work-item a.image',
+						usePopupCaption: true,
+						usePopupDefaultStyling: false,
+						usePopupEasyClose: false,
+						usePopupNav: true,
+						windowMargin: (skel.breakpoint('small').active ? 0 : 50)
+					});
+
+				});
 
 	});
 
